@@ -92,6 +92,7 @@ class PropertiesActivity : BaseActivity<PropertiesDesign>() {
                 try {
                     withProcessing { updateStatus ->
                         withProfile {
+                            Log.i("TAG", profile.source)
                             patch(profile.uuid, profile.name, profile.source, profile.interval)
 
                             coroutineScope {
