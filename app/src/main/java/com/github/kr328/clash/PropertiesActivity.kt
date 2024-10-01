@@ -81,6 +81,8 @@ class PropertiesActivity : BaseActivity<PropertiesDesign>() {
     }
 
     private suspend fun PropertiesDesign.verifyAndCommit() {
+        Log.i("TAG", profile.source)
+        Log.i("TAG", profile.toString())
         when {
             profile.name.isBlank() -> {
                 showToast(R.string.empty_name, ToastDuration.Long)
@@ -92,7 +94,7 @@ class PropertiesActivity : BaseActivity<PropertiesDesign>() {
                 try {
                     withProcessing { updateStatus ->
                         withProfile {
-                            Log.i("TAG", profile.source)
+
                             patch(profile.uuid, profile.name, profile.source, profile.interval)
 
                             coroutineScope {
