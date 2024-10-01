@@ -10,6 +10,7 @@ import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.common.util.setUUID
 import com.github.kr328.clash.design.MainDesign
 import com.github.kr328.clash.design.ui.ToastDuration
+import com.github.kr328.clash.remote.FilesClient
 import com.github.kr328.clash.remote.Remote
 import com.github.kr328.clash.remote.StatusClient
 import com.github.kr328.clash.service.model.Profile
@@ -29,7 +30,7 @@ class ExternalControlActivity : Activity(), CoroutineScope by MainScope() {
             Intent.ACTION_VIEW -> {
                 val uri = intent.data ?: return finish()
                 val url = uri.getQueryParameter("url") ?: return finish()
-
+//                val client = FilesClient(this)
                 launch {
                     val uuid = withProfile {
                         val type = when (uri.getQueryParameter("type")?.lowercase(Locale.getDefault())) {
@@ -40,6 +41,8 @@ class ExternalControlActivity : Activity(), CoroutineScope by MainScope() {
                         val name = uri.getQueryParameter("name") ?: getString(R.string.new_profile)
 
                         create(type, name).also {
+
+//                            client.importDocument(pid, uri, name)
                             patch(it, name, url, 0)
                             commit(it)
                             val profile = queryByUUID(it)

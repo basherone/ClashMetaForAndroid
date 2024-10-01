@@ -43,7 +43,6 @@ class PropertiesActivity : BaseActivity<PropertiesDesign>() {
                             val profile = design.profile
 
                             if (!canceled && profile != original) {
-                                Log.i("TAG", profile.source)
                                 withProfile {
                                     patch(profile.uuid, profile.name, profile.source, profile.interval)
                                 }
@@ -81,8 +80,6 @@ class PropertiesActivity : BaseActivity<PropertiesDesign>() {
     }
 
     private suspend fun PropertiesDesign.verifyAndCommit() {
-        Log.i("TAG", profile.source)
-        Log.i("TAG", profile.toString())
         when {
             profile.name.isBlank() -> {
                 showToast(R.string.empty_name, ToastDuration.Long)

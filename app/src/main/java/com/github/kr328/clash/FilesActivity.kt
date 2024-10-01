@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.github.kr328.clash.common.util.grantPermissions
@@ -107,8 +108,11 @@ class FilesActivity : BaseActivity<FilesDesign>() {
                                 if (uri != null) {
                                     if (it.file == null) {
                                         val name = design.requestFileName(uri.fileName ?: "File")
-
-                                        client.importDocument(stack.last(), uri, name)
+                                        val pid = stack.last()
+                                        com.github.kr328.clash.common.log.Log.d(pid)
+                                        com.github.kr328.clash.common.log.Log.d(uri.toString())
+                                        com.github.kr328.clash.common.log.Log.d(name)
+                                        client.importDocument(pid, uri, name)
                                     } else {
                                         client.copyDocument(it.file!!.id, uri)
                                     }
