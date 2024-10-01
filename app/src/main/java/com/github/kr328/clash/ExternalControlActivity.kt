@@ -41,9 +41,13 @@ class ExternalControlActivity : Activity(), CoroutineScope by MainScope() {
 
                         create(type, name).also {
                             patch(it, name, url, 0)
+                            commit(it)
+                            val profile = queryByUUID(it)
+                            if (profile != null) {
+                                setActive(profile)
+                            }
                         }
                     }
-                    startActivity(PropertiesActivity::class.intent.setUUID(uuid))
                     finish()
                 }
             }

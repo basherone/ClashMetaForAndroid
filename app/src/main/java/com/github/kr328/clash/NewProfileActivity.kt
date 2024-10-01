@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import com.github.kr328.clash.common.constants.Intents
 import com.github.kr328.clash.common.util.intent
@@ -43,7 +44,9 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
 
                                 val uuid: UUID? = when (val p = it.provider) {
                                     is ProfileProvider.File ->
+                                    {
                                         create(Profile.Type.File, name)
+                                    }
                                     is ProfileProvider.Url ->
                                         create(Profile.Type.Url, name)
                                     is ProfileProvider.External -> {

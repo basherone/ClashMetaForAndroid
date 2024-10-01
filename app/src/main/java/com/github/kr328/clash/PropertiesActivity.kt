@@ -1,5 +1,6 @@
 package com.github.kr328.clash
 
+import android.util.Log
 import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.common.util.setUUID
 import com.github.kr328.clash.common.util.uuid
@@ -42,6 +43,7 @@ class PropertiesActivity : BaseActivity<PropertiesDesign>() {
                             val profile = design.profile
 
                             if (!canceled && profile != original) {
+                                Log.i("TAG", profile.source)
                                 withProfile {
                                     patch(profile.uuid, profile.name, profile.source, profile.interval)
                                 }
