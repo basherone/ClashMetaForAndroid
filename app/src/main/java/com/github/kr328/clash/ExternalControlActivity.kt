@@ -31,21 +31,19 @@ class ExternalControlActivity : Activity(), CoroutineScope by MainScope() {
             Intent.ACTION_VIEW -> {
                 val uri = intent.data ?: return finish()
                 val url = uri.getQueryParameter("url") ?: return finish()
-//                val client = FilesClient(this)
+                val name = uri.getQueryParameter("name") ?: getString(R.string.new_profile)
+                val type = when (uri.getQueryParameter("type")?.lowercase(Locale.getDefault())) {
+                    "url" -> Profile.Type.Url
+                    "file" -> Profile.Type.File
+                    "external" -> Profile.Type.External
+                    else -> Profile.Type.Url
+                }
+                Log.d(url)
+                Log.d(name)
+                Log.d(type.toString())
                 launch {
-                    val uuid = withProfile {
-                        val type = when (uri.getQueryParameter("type")?.lowercase(Locale.getDefault())) {
-                            "url" -> Profile.Type.Url
-                            "file" -> Profile.Type.File
-                            else -> Profile.Type.Url
-                        }
-                        val name = uri.getQueryParameter("name") ?: getString(R.string.new_profile)
-                        Log.d(url)
-                        Log.d(type.toString())
-                        Log.d(name)
-                        create(type, name).also {
-
-//                            client.importDocument(pid, uri, name)
+                    withProfile {
+                        create(type, name, url).also {
                             patch(it, name, url, 0)
                             commit(it)
                             val profile = queryByUUID(it)

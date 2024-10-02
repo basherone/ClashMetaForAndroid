@@ -1,6 +1,8 @@
 package com.github.kr328.clash.service
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.github.kr328.clash.service.data.Database
 import com.github.kr328.clash.service.data.Imported
 import com.github.kr328.clash.service.data.ImportedDao
@@ -37,30 +39,57 @@ class ProfileManager(private val context: Context) : IProfileManager,
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun create(type: Profile.Type, name: String, source: String): UUID {
         val uuid = generateProfileUUID()
-        val pending = Pending(
-            uuid = uuid,
-            name = name,
-            type = type,
-            source = source,
-            interval = 0,
-            upload = 0,
-            total = 0,
-            download = 0,
-            expire = 0,
-        )
+        var pending: Pending?;
+        if (type == Profile.Type.External) {
+            val decodedBytes = Base64.getDecoder().decode(source)
+            pending = Pending(
+                uuid = uuid,
+                name = name,
+                type = Profile.Type.File,
+                source = "",
+                interval = 0,
+                upload = 0,
+                total = 0,
+                download = 0,
+                expire = 0,
+            )
+            PendingDao().insert(pending)
 
-        PendingDao().insert(pending)
-
-        context.pendingDir.resolve(uuid.toString()).apply {
-            deleteRecursively()
-            mkdirs()
-
-            @Suppress("BlockingMethodInNonBlockingContext")
-            resolve("config.yaml").createNewFile()
-            resolve("providers").mkdir()
+            context.pendingDir.resolve(uuid.toString()).apply {
+                deleteRecursively()
+                mkdirs()
+                @Suppress("BlockingMethodInNonBlockingContext")
+                resolve("config.yaml").writeBytes(decodedBytes)
+                resolve("providers").mkdir()
+            }
         }
+        else{
+            pending = Pending(
+                uuid = uuid,
+                name = name,
+                type = type,
+                source = source,
+                interval = 0,
+                upload = 0,
+                total = 0,
+                download = 0,
+                expire = 0,
+            )
+            PendingDao().insert(pending)
+
+            context.pendingDir.resolve(uuid.toString()).apply {
+                deleteRecursively()
+                mkdirs()
+
+                @Suppress("BlockingMethodInNonBlockingContext")
+                resolve("config.yaml").createNewFile()
+                resolve("providers").mkdir()
+            }
+        }
+
 
         return uuid
     }
