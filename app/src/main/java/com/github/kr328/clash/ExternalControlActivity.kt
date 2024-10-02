@@ -44,7 +44,12 @@ class ExternalControlActivity : Activity(), CoroutineScope by MainScope() {
                 launch {
                     withProfile {
                         create(type, name, url).also {
-                            patch(it, name, url, 0)
+                            if (type == Profile.Type.External) {
+                                patch(it, name, "", 0)
+                            }
+                            else{
+                                patch(it, name, url, 0)
+                            }
                             commit(it)
                             val profile = queryByUUID(it)
                             if (profile != null) {
