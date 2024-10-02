@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.github.kr328.clash.common.constants.Intents
+import com.github.kr328.clash.common.log.Log
 import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.common.util.setUUID
 import com.github.kr328.clash.design.MainDesign
@@ -39,7 +40,9 @@ class ExternalControlActivity : Activity(), CoroutineScope by MainScope() {
                             else -> Profile.Type.Url
                         }
                         val name = uri.getQueryParameter("name") ?: getString(R.string.new_profile)
-
+                        Log.d(url)
+                        Log.d(type.toString())
+                        Log.d(name)
                         create(type, name).also {
 
 //                            client.importDocument(pid, uri, name)

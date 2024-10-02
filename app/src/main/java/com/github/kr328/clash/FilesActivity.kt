@@ -114,6 +114,8 @@ class FilesActivity : BaseActivity<FilesDesign>() {
                                         com.github.kr328.clash.common.log.Log.d(name)
                                         client.importDocument(pid, uri, name)
                                     } else {
+                                        com.github.kr328.clash.common.log.Log.d(it.file.toString())
+                                        com.github.kr328.clash.common.log.Log.d(uri.toString())
                                         client.copyDocument(it.file!!.id, uri)
                                     }
                                 }
