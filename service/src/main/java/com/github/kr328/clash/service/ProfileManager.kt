@@ -78,9 +78,9 @@ class ProfileManager(private val context: Context) : IProfileManager,
 """
                 val enBytes = Base64.encodeToString(ss.toByteArray(),0)
                 Log.d(enBytes)
-                var decodedBytes = Base64.decode(source,0).toString()
+                var decodedBytes = String(Base64.decode(source,0))
                 Log.d(decodedBytes)
-                decodedBytes = Base64.decode(enBytes,0).toString()
+                decodedBytes = String(Base64.decode(enBytes,0))
                 Log.d(decodedBytes)
                 @Suppress("BlockingMethodInNonBlockingContext")
                 resolve("config.yaml").writeText(decodedBytes)
