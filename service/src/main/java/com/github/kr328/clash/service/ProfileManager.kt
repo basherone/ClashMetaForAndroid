@@ -1,10 +1,7 @@
 package com.github.kr328.clash.service
 
 import android.content.Context
-import android.os.Build
 import android.util.Base64
-import androidx.annotation.RequiresApi
-import com.github.kr328.clash.common.log.Log
 import com.github.kr328.clash.service.data.Database
 import com.github.kr328.clash.service.data.Imported
 import com.github.kr328.clash.service.data.ImportedDao
@@ -41,7 +38,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun create(type: Profile.Type, name: String, source: String): UUID {
         val uuid = generateProfileUUID()
         var pending: Pending?;
@@ -62,26 +58,7 @@ class ProfileManager(private val context: Context) : IProfileManager,
             context.pendingDir.resolve(uuid.toString()).apply {
                 deleteRecursively()
                 mkdirs()
-                Log.d(source)
-                var ss = """proxies:
-  - name: 🇸🇬 SGP 01
-    type: ss
-    server: 80398b4.npjewb.sbs
-    port: '20101'
-    cipher: aes-128-gcm
-    password: edcb3be9af036c86
-    udp: true
-    plugin: obfs
-    plugin-opts:
-      mode: http
-      host: zBerFkO8a2.microsoft.com
-"""
-                val enBytes = Base64.encodeToString(ss.toByteArray(),0)
-                Log.d(enBytes)
-                var decodedBytes = String(Base64.decode(source,0))
-                Log.d(decodedBytes)
-                decodedBytes = String(Base64.decode(enBytes,0))
-                Log.d(decodedBytes)
+                val decodedBytes = String(Base64.decode(source,0))
                 @Suppress("BlockingMethodInNonBlockingContext")
                 resolve("config.yaml").writeText(decodedBytes)
                 resolve("providers").mkdir()
@@ -110,7 +87,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
                 resolve("providers").mkdir()
             }
         }
-
 
         return uuid
     }

@@ -4,16 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import com.github.kr328.clash.common.constants.Intents
-import com.github.kr328.clash.common.log.Log
-import com.github.kr328.clash.common.util.intent
-import com.github.kr328.clash.common.util.setUUID
-import com.github.kr328.clash.design.MainDesign
-import com.github.kr328.clash.design.ui.ToastDuration
-import com.github.kr328.clash.remote.FilesClient
 import com.github.kr328.clash.remote.Remote
-import com.github.kr328.clash.remote.StatusClient
 import com.github.kr328.clash.service.model.Profile
 import com.github.kr328.clash.util.startClashService
 import com.github.kr328.clash.util.stopClashService
@@ -38,9 +30,6 @@ class ExternalControlActivity : Activity(), CoroutineScope by MainScope() {
                     "external" -> Profile.Type.External
                     else -> Profile.Type.Url
                 }
-                Log.d(url)
-                Log.d(name)
-                Log.d(type.toString())
                 launch {
                     withProfile {
                         create(type, name, url).also {
