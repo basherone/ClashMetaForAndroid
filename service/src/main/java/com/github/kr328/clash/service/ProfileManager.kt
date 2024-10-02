@@ -2,7 +2,9 @@ package com.github.kr328.clash.service
 
 import android.content.Context
 import android.os.Build
+import android.util.Base64
 import androidx.annotation.RequiresApi
+import com.github.kr328.clash.common.log.Log
 import com.github.kr328.clash.service.data.Database
 import com.github.kr328.clash.service.data.Imported
 import com.github.kr328.clash.service.data.ImportedDao
@@ -25,7 +27,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.FileNotFoundException
 import java.math.BigDecimal
-import java.util.*
 
 class ProfileManager(private val context: Context) : IProfileManager,
     CoroutineScope by CoroutineScope(Dispatchers.IO) {
@@ -60,7 +61,9 @@ class ProfileManager(private val context: Context) : IProfileManager,
             context.pendingDir.resolve(uuid.toString()).apply {
                 deleteRecursively()
                 mkdirs()
-                val decodedBytes = Base64.getDecoder().decode(source).toString()
+                Log.d(source)
+                val decodedBytes = Base64.decode(source,0).toString()
+                Log.d(decodedBytes)
                 @Suppress("BlockingMethodInNonBlockingContext")
                 resolve("config.yaml").writeText(decodedBytes)
                 resolve("providers").mkdir()
