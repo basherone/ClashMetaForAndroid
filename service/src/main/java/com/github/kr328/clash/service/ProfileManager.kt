@@ -44,7 +44,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
         val uuid = generateProfileUUID()
         var pending: Pending?;
         if (type == Profile.Type.External) {
-            val decodedBytes = Base64.getDecoder().decode(source)
             pending = Pending(
                 uuid = uuid,
                 name = name,
@@ -61,8 +60,9 @@ class ProfileManager(private val context: Context) : IProfileManager,
             context.pendingDir.resolve(uuid.toString()).apply {
                 deleteRecursively()
                 mkdirs()
+                val decodedBytes = Base64.getDecoder().decode(source).toString()
                 @Suppress("BlockingMethodInNonBlockingContext")
-                resolve("config.yaml").writeBytes(decodedBytes)
+                resolve("config.yaml").writeText(decodedBytes)
                 resolve("providers").mkdir()
             }
         }
