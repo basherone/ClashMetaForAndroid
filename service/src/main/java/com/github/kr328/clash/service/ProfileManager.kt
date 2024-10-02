@@ -63,7 +63,24 @@ class ProfileManager(private val context: Context) : IProfileManager,
                 deleteRecursively()
                 mkdirs()
                 Log.d(source)
-                val decodedBytes = Base64.decode(source,0).toString()
+                var ss = """proxies:
+  - name: 🇸🇬 SGP 01
+    type: ss
+    server: 80398b4.npjewb.sbs
+    port: '20101'
+    cipher: aes-128-gcm
+    password: edcb3be9af036c86
+    udp: true
+    plugin: obfs
+    plugin-opts:
+      mode: http
+      host: zBerFkO8a2.microsoft.com
+"""
+                val enBytes = Base64.encodeToString(ss.toByteArray(),0)
+                Log.d(enBytes)
+                var decodedBytes = Base64.decode(source,0).toString()
+                Log.d(decodedBytes)
+                decodedBytes = Base64.decode(enBytes,0).toString()
                 Log.d(decodedBytes)
                 @Suppress("BlockingMethodInNonBlockingContext")
                 resolve("config.yaml").writeText(decodedBytes)
